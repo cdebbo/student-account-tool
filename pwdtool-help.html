@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+
+</body>
+</html>
+<!--
+    <div ng-app="pwdtool" ng-controller="pwdtoolctrl">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                      <ng-hide ng-hide="windows_user_name!=''" >
+                        <div class="panel-body">
+                            <div class="well">
+                                <i>This tool is not available.</i>
+                            </div>
+                        </div>
+                      </ng-hide>
+                      <ng-hide ng-hide="windows_user_name==''">
+
+     
+                        <div class="panel-body">
+                            <div class="well">
+                                <p>Welcome <b>{{ windows_user_name }}</b> </p>
+                                <i>Note that any reset or unlock action will be logged.</i>
+                            </div>
+                            <h1>STUDENT ACCOUNT TOOL</h1>
+                            <form ng-submit="findStudent()">
+                                <label>Student Name</label>
+
+                                <div class="input-group">
+                                    <input class="form-control" type="text" required ng-model="student_name" placeholder="*Student Name*">
+                                    
+
+                                    
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-primary" value="Find" type="submit">Find</button>
+                                    </span>
+                                </div>
+                                <span class="help-block">Try these entries <kbd>Chr*</kbd> or <kbd>Chris S*</kbd> or 
+                                <kbd>* Smit*</kbd> for a student named <code>Chris Smith</code>. 
+                                You must include the <kbd>*</kbd>.<br>At most 20 entries are returned. 
+                                Be more specific if you can't find the student.
+                </span>
+                            </form>
+
+                            <h1> List of Students </h1>
+                            <label>{{ find_message }}</label>
+                            <div ng-if="users.length > 0">
+                                Select the student or refine your search if you don't see the name here.
+                                <br>
+                                <table class="table table-hover table-bordered table-condensed">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>School/Grade</th>
+                                        <th>Locked Out</th>
+                                    </tr>
+
+                                    <tr ng-repeat="user in users | orderBy : 'DisplayName'" ng-click="setSelectedStudent(user);">
+                                        <td>{{ user.DisplayName }}</td>
+                                        <td>{{ user.gafeou }}</td>
+                                        <td ng-if="user.lockedOut != 0">Yes</td>
+                                        <td ng-if="user.lockedOut == 0"></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div ng-if="selected_user.length > 0">
+                                <h1>Reset this student</h1>
+                                <h2><span class="label label-success">{{ selected_user }}</span></h2>
+                                <span class="help-block">
+                                Note that you are only able to reset or unlock accounts to which you have already been delegated access. 
+                                </span>
+
+                                <form>
+
+                                    <div class="form-group">
+                                        <label>Teacher Password</label>
+                                        <input required type="password" ng-model="teacher_password" >
+                                    </div>
+
+                                    <div class="form-group" ng-if="selected_user_islockedout">
+                                        <label>Unlock this account</label>
+                                        <input class="btn btn-primary" value="Unlock" ng-click="resetStudent('unlock', teacher_password, '')" type="submit">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Student Password</label>
+                                        <input type="text" ng-minlength="6" ng-model="student_password" >
+                                        <input class="btn btn-primary" value="Reset" ng-click="resetStudent('reset', teacher_password, student_password)" type="submit">
+                                    </div>
+
+
+                                </form>
+                                <br> <span class="label label-default">Reset Status: {{ reset_status }}</span>
+                            </div>
+                        </div>
+
+</ng-hide>                        
+                    </div>
+
+                    <div class="well">
+                        <p><b>Written by the KCDSB IT Staff</b></p>
+                        If you have any questions or concerns please submit a ticket to the <a href="mailto:helpdesk@kcdsb.on.ca">HelpDesk</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src=".\pwdtool.js">
+
+    </script>
+</body>
+
+</html>
+
+-->

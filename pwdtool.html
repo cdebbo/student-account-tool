@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div ng-app="pwdtool" ng-controller="pwdtoolctrl">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                      <ng-hide ng-hide="windows_user_name!=''" >
+                        <div class="panel-body">
+                            <div class="well">
+                                <i>This tool is not available.</i>
+                            </div>
+                        </div>
+                      </ng-hide>
+                      <ng-hide ng-hide="windows_user_name==''">
+
+     
+                        <div class="panel-body">
+                            <div class="well">
+                                <p>Welcome <b>{{ windows_user_name }}</b> </p>
+                                <i>Note that any reset or unlock action will be logged.</i>
+                            </div>
+                            <h1>STUDENT ACCOUNT TOOL</h1>
+                            <form ng-submit="findStudent()">
+                                <label>Student Name</label>
+
+                                <div class="input-group">
+                                    <input class="form-control" type="text" required ng-model="student_name" placeholder="*Student Name*">
+                                    
+
+                                    
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-primary" value="Find" type="submit">Find</button>
+                                    </span>
+                                </div>
+                                <span class="help-block">Try these entries <kbd>Chr*</kbd> or <kbd>Chris S*</kbd> or 
+                                <kbd>* Smit*</kbd> for a student named <code>Chris Smith</code>. 
+                                You must include the <kbd>*</kbd>.<br>At most 20 entries are returned. 
+                                Be more specific if you can't find the student.
+                </span>
+                            </form>
+
+                            <h1> List of Students </h1>
+                            <label>{{ find_message }}</label>
+                            <div ng-if="users.length > 0">
+                                Select the student or refine your search if you don't see the name here.
+                                <br>
+                                <table class="table table-hover table-bordered table-condensed">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>School/Grade</th>
+                                        <th>Locked Out</th>
+                                        <th>Disabled</th>
+                                    </tr>
+
+                                    <tr ng-repeat="user in users | orderBy : 'DisplayName'" ng-click="setSelectedStudent(user);">
+                                        <td>{{ user.DisplayName }}</td>
+                                        <td>{{ user.samaccountname }}</td>
+                                        <td>{{ user.gafeou }}</td>
+                                        <td ng-if="user.lockedOut != 0">Yes</td>
+                                        <td ng-if="user.lockedOut == 0"></td>
+                                        <td ng-if="user.Enabled == false">Yes</td>
+                                        <td ng-if="user.Enabled == true"></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div ng-if="selected_user.length > 0">
+<h1>Student Details</h1>
+                                <h2><span class="label label-success">{{ selected_user }}</span></h2>
+                                <span class="help-block">
+                                These are the computer account details associated with this student.
+                                </span>
+<ul>
+<li><b>Office-365 Email:</b> {{ selected_user_mail }} </li>
+<li><b>G-Suite Email:</b> {{ selected_user_gafemail }} </li>
+<li><b>G-Suite Organizational Unit:</b> {{ selected_user_gafeou }} </li>
+<li><b>OEN:</b> {{ selected_user_oen }} </li>
+<!-- not always populated ... <li>Maplewood Student Number: {{ selected_user_mwnumber }} </li>  -->
+</ul>
+
+
+                                <h2>Reset Password or Unlock Account</h2>
+                                <div class="well">
+                                <span class="help-block">
+                                Note that you are only able to reset or modify accounts to which you have already been delegated access. 
+                                </span>
+
+                                <form>
+
+                                  <div class="form-group">
+                                    <label>Teacher Password</label>
+                                    <input required type="password" ng-model="teacher_password" >
+                                    <span class="help-block">
+                                      You must enter your computer password in order to complete these actions.
+                                    </span>
+                                  </div>
+                                  <div ng-if="teacher_password.length >= 0">
+                                    <div class="form-group" ng-if="selected_user_islockedout">
+                                      <label>Unlock this account</label>
+                                      <input class="btn btn-primary" value="Unlock" ng-click="resetStudent('Unlock', teacher_password, '', '')" type="submit">
+                                    </div>
+
+                                    <div class="form-group" ng-if="!selected_user_isdisabled">
+                                      <label>Disable this account</label>
+                                      <input class="btn btn-primary" value="Disable" ng-click="resetStudent('Disable', teacher_password, '', '')" type="submit">
+                                    </div>
+
+                                    <div class="form-group" ng-if="selected_user_isdisabled">
+                                      <label>Enable this account</label>
+                                      <input class="btn btn-primary" value="Enable" ng-click="resetStudent('Enable', teacher_password, '', '')" type="submit">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Student Password</label>
+                                        <input type="text" ng-minlength="6" ng-model="student_password" >
+                                        <!-- 
+                                          <input type="checkbox" ng-model="change_at_next_logon">Change Password at Next Login</input> 
+                                        -->
+                                        <input class="btn btn-primary" value="Reset" ng-click="resetStudent('Reset', teacher_password, student_password, change_at_next_logon)" type="submit">
+                                    </div>
+                                  </div>
+
+                                </form>
+                                <br> <span class="label label-default">Reset Status: {{ reset_status }}</span>
+                                </div>
+  
+                                <h2>Validate Password</h2>
+                                <div class="well">
+                                <span class="help-block">
+                                Enter the student's password to validate that it is correct.
+                                </span>
+
+                                <form>
+
+                                    <div class="form-group">
+                                        <label>Current Student Password</label>
+                                        <input type="text" ng-minlength="6" ng-model="current_student_password" >
+                                        <input class="btn btn-primary" value="Validate" ng-click="validateStudent(current_student_password)" type="submit">
+                                    </div>
+
+
+                                </form>
+                                <br> <span class="label label-default">Validation Status: {{ validation_status }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+</ng-hide>                        
+                    </div>
+
+                    <div class="well well-sm">
+                        <p><b>Written by the KCDSB IT Staff</b></p>
+                        If you have any questions or concerns please submit a ticket to the <a href="mailto:helpdesk@kcdsb.on.ca">HelpDesk</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src=".\pwdtool.js">
+
+    </script>
+</body>
+
+</html>
