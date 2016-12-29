@@ -1,5 +1,5 @@
 # validate user
-try {
+<#try {
   $username = $PoSHUsername.split('\\')[1]
   if (((Get-ADGroupMember "All Permanent Staff" -Recursive).name -contains $(get-aduser $username).Name) -eq $false) {
     @{"reset_status" = "Permissions Problem"} | ConvertTo-Json
@@ -10,6 +10,14 @@ try {
   @{"reset_status" = "Permissions Problem"} | ConvertTo-Json
   return
 }
+#>
+import-module "C:\Program Files\PoSHServer\webroot\http\pwdtoolv2\pwdtool-utils.psm1"
+$username = $PoSHUsername.split('\\')[1]
+$r = validateUser -username $username -group "All Permanent Staff"
+if (! $r.valid) {
+  @{"reset_status" = $r.message} | ConvertTo-Json
+  return
+}
 
 #do this before installing the software
 # New-EventLog -LogName Application -Source StudentServices
@@ -18,6 +26,7 @@ try {
 $susername = $PoSHPost.susername
 $spassword = $PoSHPost.spassword
 $tpassword = $PoSHPost.tpassword
+$reason = $PoSHPost.reason
 $reset_action = $PoSHPost.action
 $change_at_next_logon = $PoSHPost.change_at_next_logon
 
@@ -40,15 +49,15 @@ try {
   switch ($reset_action) { 
       "Disable" {
         Disable-ADAccount -Credential $credential -Identity $susername
-        Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : disable account for $susername")
-        $emaillog = "User {0} just disabled the computer account for student {1}" -f $cred_username,$susername
+        Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : disable account for $susername. reason: $reason")
+        $emaillog = "User {0} just disabled the computer account for student {1} with reason: {2}" -f $cred_username,$susername, $reason
         Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Enable/Disable Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
         $status = @{ "reset_status" = "disabled"}
       }
       "Enable" {
         Enable-ADAccount -Credential $credential -Identity $susername
-        Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : enable account for $susername")
-        $emaillog = "User {0} just enabled the computer account for student {1}" -f $cred_username,$susername
+        Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : enable account for $susername. reason: $reason")
+        $emaillog = "User {0} just enabled the computer account for student {1} with reason: {2}" -f $cred_username,$susername, $reason
         Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Enable/Disable Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
         $status = @{ "reset_status" = "enabled"}
       }

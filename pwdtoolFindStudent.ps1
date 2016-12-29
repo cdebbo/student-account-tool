@@ -1,5 +1,5 @@
 # validate user
-try {
+<#try {
   $username = $PoSHUsername.split('\\')[1]
   if (((Get-ADGroupMember "All Permanent Staff" -Recursive).name -contains $(get-aduser $username).Name) -eq $false) {
     @{"users" = @()} | ConvertTo-Json
@@ -7,6 +7,15 @@ try {
   }
 } catch {
   write-host ($_.Exception.Message);
+  @{"users" = @()} | ConvertTo-Json
+  return
+}
+#>
+
+import-module "C:\Program Files\PoSHServer\webroot\http\pwdtoolv2\pwdtool-utils.psm1"
+$username = $PoSHUsername.split('\\')[1]
+$r = validateUser -username $username -group "All Permanent Staff"
+if (! $r.valid) {
   @{"users" = @()} | ConvertTo-Json
   return
 }
@@ -24,6 +33,9 @@ function isEnabled($userAccountControl) {
 # @{"Label"="enabled";e={(isEnabled -userAccountControl $_.useraccountcontrol)}}, `
 
 $name = $PoSHPost.name
+
+Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : looking for $name now")
+
 try {
   Import-Module ActiveDirectory
   $users = Get-ADUser -ResultSetSize 20 -Filter 'Name -like $name' -Properties * | `

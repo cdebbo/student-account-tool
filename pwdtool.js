@@ -56,16 +56,18 @@ app.controller('pwdtoolctrl', function ($scope, $http) {
         $scope.selected_user_islockedout = (user.lockedOut != 0);
         $scope.unlock_account = false;
         $scope.student_password = "";
+        $scope.disable_reason = "";
         $scope.current_student_password = "";
         //console.log($scope.selected_user);
     }
 
-    $scope.resetStudent = function (action, teacher_password, student_password, change_at_next_logon) {
+    $scope.resetStudent = function (action, teacher_password, student_password, change_at_next_logon, disable_reason) {
         var data = $.param({
             susername: $scope.selected_user_sam,
             spassword: student_password,
             tpassword: teacher_password,
             change_at_next_logon: change_at_next_logon,
+            reason: disable_reason,
             action: action
         });
         //console.log(data);

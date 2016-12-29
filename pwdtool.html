@@ -109,27 +109,37 @@
                                   <div ng-if="teacher_password.length >= 0">
                                     <div class="form-group" ng-if="selected_user_islockedout">
                                       <label>Unlock this account</label>
-                                      <input class="btn btn-primary" value="Unlock" ng-click="resetStudent('Unlock', teacher_password, '', '')" type="submit">
+                                      <input class="btn btn-primary" value="Unlock" ng-click="resetStudent('Unlock', teacher_password, '', '', '')" type="submit">
                                     </div>
 
-                                    <div class="form-group" ng-if="!selected_user_isdisabled">
+                                    <div ng-if="!selected_user_isdisabled">
+                                    <div class="form-group" >
                                       <label>Disable this account</label>
-                                      <input class="btn btn-primary" value="Disable" ng-click="resetStudent('Disable', teacher_password, '', '')" type="submit">
+                                      <input type="text" required ng-model="disable_reason" placeholder="Reason">
+
+                                      <input class="btn btn-primary" value="Disable" ng-click="resetStudent('Disable', teacher_password, '', '', disable_reason)" type="submit">
+                                    </div>
                                     </div>
 
-                                    <div class="form-group" ng-if="selected_user_isdisabled">
+                                    <div  ng-if="selected_user_isdisabled">
+                                    <div class="form-group">
                                       <label>Enable this account</label>
-                                      <input class="btn btn-primary" value="Enable" ng-click="resetStudent('Enable', teacher_password, '', '')" type="submit">
+                                      <input type="text" required ng-model="disable_reason" placeholder="Reason">
+
+                                      <input class="btn btn-primary" value="Enable" ng-click="resetStudent('Enable', teacher_password, '', '', disable_reason)" type="submit">
+                                    </div>
                                     </div>
 
+                                    
                                     <div class="form-group">
                                         <label>Student Password</label>
                                         <input type="text" ng-minlength="6" ng-model="student_password" >
                                         <!-- 
                                           <input type="checkbox" ng-model="change_at_next_logon">Change Password at Next Login</input> 
                                         -->
-                                        <input class="btn btn-primary" value="Reset" ng-click="resetStudent('Reset', teacher_password, student_password, change_at_next_logon)" type="submit">
+                                        <input class="btn btn-primary" value="Reset" ng-click="resetStudent('Reset', teacher_password, student_password, change_at_next_logon, '')" type="submit">
                                     </div>
+                                    
                                   </div>
 
                                 </form>
