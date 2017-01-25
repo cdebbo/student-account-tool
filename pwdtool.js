@@ -24,6 +24,7 @@ app.controller('pwdtoolctrl', function ($scope, $http) {
         var data = $.param({
             name: $scope.student_name
         });
+        $('#btnFindStudent').html("Searching now...");
         $http.post('pwdtoolfindStudent.ps1', data).then(function (data, status) {
             if (data.data.users.length == 0) {
                 $scope.find_message = "No students found or you do not have staff permissions";
@@ -37,8 +38,10 @@ app.controller('pwdtoolctrl', function ($scope, $http) {
                     $scope.users = [data.data.users];
                 }
             }
+            $('#btnFindStudent').html("Find");
         }, function (data, status) {
             alert("Unable to find any students that match your query.");
+            $('#btnFindStudent').html("Find");
         });
     }
 
@@ -62,6 +65,12 @@ app.controller('pwdtoolctrl', function ($scope, $http) {
     }
 
     $scope.resetStudent = function (action, teacher_password, student_password, change_at_next_logon, disable_reason) {
+        if (action == "Disable" || action == "Enable") {
+          if (disable_reason == null || disable_reason == "") {
+            alert ("You must provide a reason");
+            return
+          }
+        }
         var data = $.param({
             susername: $scope.selected_user_sam,
             spassword: student_password,

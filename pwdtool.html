@@ -6,6 +6,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" href=".\resources\paper.bootstrap.min.css">-->
 
 </head>
 
@@ -40,13 +41,13 @@
 
                                     
                                     <span class="input-group-btn">
-                                    <button class="btn btn-primary" value="Find" type="submit">Find</button>
+                                    <button class="btn btn-primary" id="btnFindStudent" type="submit">Find</button>
                                     </span>
                                 </div>
                                 <span class="help-block">Try these entries <kbd>Chr*</kbd> or <kbd>Chris S*</kbd> or 
                                 <kbd>* Smit*</kbd> for a student named <code>Chris Smith</code>. 
                                 You must include the <kbd>*</kbd>.<br>At most 20 entries are returned. 
-                                Be more specific if you can't find the student.
+                                If you can't find the student then try a more precise search term.
                 </span>
                             </form>
 
@@ -108,42 +109,55 @@
                                   </div>
                                   <div ng-if="teacher_password.length >= 0">
                                     <div class="form-group" ng-if="selected_user_islockedout">
-                                      <label>Unlock this account</label>
-                                      <input class="btn btn-primary" value="Unlock" ng-click="resetStudent('Unlock', teacher_password, '', '', '')" type="submit">
+                                      <div class="panel panel-info">
+                                        <div class="panel-heading">Unlock this account</div>
+                                        <div class="panel-body">
+                                          <input class="btn btn-primary" id="btnUnlock" value="Unlock" ng-click="resetStudent('Unlock', teacher_password, '', '', '')" type="submit">
+                                        </div>
+                                      </div>
                                     </div>
 
                                     <div ng-if="!selected_user_isdisabled">
-                                    <div class="form-group" >
-                                      <label>Disable this account</label>
-                                      <input type="text" required ng-model="disable_reason" placeholder="Reason">
-
-                                      <input class="btn btn-primary" value="Disable" ng-click="resetStudent('Disable', teacher_password, '', '', disable_reason)" type="submit">
-                                    </div>
+                                      <div class="form-group" >
+                                        <div class="panel panel-info">
+                                          <div class="panel-heading">Disable this account</div>
+                                          <div class="panel-body">
+                                            <input type="text" style="width: 80%"  ng-model="disable_reason" placeholder="Reason">
+                                            <input class="btn btn-primary" id="btnDisable" value="Disable" ng-click="resetStudent('Disable', teacher_password, '', '', disable_reason)" type="submit">
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
 
                                     <div  ng-if="selected_user_isdisabled">
-                                    <div class="form-group">
-                                      <label>Enable this account</label>
-                                      <input type="text" required ng-model="disable_reason" placeholder="Reason">
-
-                                      <input class="btn btn-primary" value="Enable" ng-click="resetStudent('Enable', teacher_password, '', '', disable_reason)" type="submit">
-                                    </div>
+                                      <div class="form-group">
+                                        <div class="panel panel-info">
+                                          <div class="panel-heading">Enable this account</div>
+                                          <div class="panel-body">
+                                            <input type="text" style="width: 80%"  ng-model="disable_reason" placeholder="Reason">
+                                            <input class="btn btn-primary" id="btnEnable" value="Enable" ng-click="resetStudent('Enable', teacher_password, '', '', disable_reason)" type="submit">
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
 
                                     
                                     <div class="form-group">
-                                        <label>Student Password</label>
-                                        <input type="text" ng-minlength="6" ng-model="student_password" >
+                                      <div class="panel panel-info">
+                                        <div class="panel-heading">Student Password</div>
+                                          <div class="panel-body">
+                                          <input type="text" ng-minlength="6" ng-model="student_password" >
                                         <!-- 
-                                          <input type="checkbox" ng-model="change_at_next_logon">Change Password at Next Login</input> 
+                                        <input type="checkbox" ng-model="change_at_next_logon">Change Password at Next Login</input> 
                                         -->
-                                        <input class="btn btn-primary" value="Reset" ng-click="resetStudent('Reset', teacher_password, student_password, change_at_next_logon, '')" type="submit">
+                                          <input class="btn btn-primary" id="btnReset" value="Reset" ng-click="resetStudent('Reset', teacher_password, student_password, change_at_next_logon, '')" type="submit">
+                                        </div>
+                                      </div>
                                     </div>
-                                    
                                   </div>
 
                                 </form>
-                                <br> <span class="label label-default">Reset Status: {{ reset_status }}</span>
+                                <br> Reset Status: <h5><span class="label label-info">{{ reset_status }}</span><h5>
                                 </div>
   
                                 <h2>Validate Password</h2>
@@ -155,14 +169,14 @@
                                 <form>
 
                                     <div class="form-group">
-                                        <label>Current Student Password</label>
-                                        <input type="text" ng-minlength="6" ng-model="current_student_password" >
-                                        <input class="btn btn-primary" value="Validate" ng-click="validateStudent(current_student_password)" type="submit">
+                                        <!--<label>Current Student Password</label>-->
+                                        <input type="text" ng-minlength="6" ng-model="current_student_password" placeholder="Current password">
+                                        <input class="btn btn-primary" id="btnValidate" value="Validate" ng-click="validateStudent(current_student_password)" type="submit">
                                     </div>
 
 
                                 </form>
-                                <br> <span class="label label-default">Validation Status: {{ validation_status }}</span>
+                                <br>Validation Status: <h5><span class="label label-info">{{ validation_status }}</span></h5>
                                 </div>
                             </div>
                         </div>

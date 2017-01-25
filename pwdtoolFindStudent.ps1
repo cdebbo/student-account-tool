@@ -1,18 +1,5 @@
 # validate user
-<#try {
-  $username = $PoSHUsername.split('\\')[1]
-  if (((Get-ADGroupMember "All Permanent Staff" -Recursive).name -contains $(get-aduser $username).Name) -eq $false) {
-    @{"users" = @()} | ConvertTo-Json
-    return
-  }
-} catch {
-  write-host ($_.Exception.Message);
-  @{"users" = @()} | ConvertTo-Json
-  return
-}
-#>
-
-import-module "C:\Program Files\PoSHServer\webroot\http\pwdtoolv2\pwdtool-utils.psm1"
+import-module "C:\Program Files\PoSHServer\webroot\http\pwdtool\pwdtool-utils.psm1"
 $username = $PoSHUsername.split('\\')[1]
 $r = validateUser -username $username -group "All Permanent Staff"
 if (! $r.valid) {
