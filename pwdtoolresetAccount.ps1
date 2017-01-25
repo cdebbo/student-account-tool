@@ -39,21 +39,21 @@ try {
         Disable-ADAccount -Credential $credential -Identity $susername
         Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : disable account for $susername. reason: $reason")
         $emaillog = "User {0} just disabled the computer account for student {1} with reason: {2}" -f $cred_username,$susername, $reason
-        Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Enable/Disable Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
+        Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Enable/Disable Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "accttool-noreply@kcdsb.on.ca" -body $emaillog 
         $status = @{ "reset_status" = "disabled"}
       }
       "Enable" {
         Enable-ADAccount -Credential $credential -Identity $susername
         Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : enable account for $susername. reason: $reason")
         $emaillog = "User {0} just enabled the computer account for student {1} with reason: {2}" -f $cred_username,$susername, $reason
-        Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Enable/Disable Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
+        Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Enable/Disable Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "accttool-noreply@kcdsb.on.ca" -body $emaillog 
         $status = @{ "reset_status" = "enabled"}
       }
       "Unlock" {
         Unlock-ADAccount -Credential $credential -Identity $susername
         Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : unlock account for $susername")
         $emaillog = "User {0} just unlocked the computer account for student {1}" -f $cred_username,$susername
-        Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Reset or Unlock Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
+        Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Reset or Unlock Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "accttool-noreply@kcdsb.on.ca" -body $emaillog 
         $status = @{ "reset_status" = "unlocked"}
       }
       "Reset" {
@@ -64,9 +64,9 @@ try {
             Set-ADUser $susername -ChangePasswordAtLogon $true
             Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : change at next logon set to TRUE for student $susername")
           } 
-          Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : reset password for $susername to '$spassword'")
-          $emaillog = "User {0} just reset the computer account for student {1} to '{2}'" -f ($cred_username),$susername, $spassword
-          Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Reset or Unlock Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
+          Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : reset password for $susername")
+          $emaillog = "User {0} just reset the computer account password for student {1}" -f ($cred_username),$susername
+          Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Reset or Unlock Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "accttool-noreply@kcdsb.on.ca" -body $emaillog 
           $status = @{ "reset_status" = "reset password"}
         } else {
           Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username : failed reset password: invalid credentials")

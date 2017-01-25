@@ -33,7 +33,7 @@ try {
   }
   Write-EventLog -LogName Application -Source StudentServices -EventId 5555 -Message $("User $cred_username attempted to validate the account for $susername")
   $emaillog = "User {0} just attempted to validate the user account for student {1}" -f $cred_username,$susername
-  Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Validate Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "pwdreset-noreply@kcdsb.on.ca" -body $emaillog 
+  Send-MailMessage -To ($cred_username.substring(6) + "@kcdsb.on.ca") -Subject "Validate Student Account Notification" -SmtpServer kcdsb-on-ca.mail.eo.outlook.com -from "accttool-noreply@kcdsb.on.ca" -body $emaillog 
   $status = @{ "validation_status" = $IsValid}
 
 } catch {
